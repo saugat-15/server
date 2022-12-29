@@ -17,11 +17,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
+  console.log(req.body);
   try {
     const findProducts = await Products.find();
     if (findProducts) {
+      console.log(findProducts)
       res.send({
-        message: "products fetched",
+        message: "products fetchedsss",
         productsList: findProducts,
       });
     }
