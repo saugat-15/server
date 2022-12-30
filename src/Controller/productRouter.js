@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const findProducts = await Products.find();
     if (findProducts) {
@@ -33,8 +33,8 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", upload.single("file"), async (req, res) => {
-  req.body.productImage = req.file.filename;
-  console.log(req.file);
+ // req.body.productImage = req.file.filename;
+ // console.log(req.file);
   try {
     console.log(req.body);
     const product = await Products.create(req.body);

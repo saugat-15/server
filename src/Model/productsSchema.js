@@ -9,9 +9,11 @@ const productsSchema = new mongoose.Schema(
     description: { type: String,},
   },
   {
-    collection: "Products",
+    collection: "products",
   }
 );
 
 const productsModel = mongoose.model("productsModel", productsSchema);
 module.exports = productsModel;
+
+
