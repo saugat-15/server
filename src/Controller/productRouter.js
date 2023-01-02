@@ -3,7 +3,7 @@ const Products = require("../Model/productsSchema");
 const router = express.Router();
 const multer = require("multer");
 
-const {uploadFile} = require('../../s3')
+// const {uploadFile} = require('../../s3')
 // const upload = multer()
 
 const storage = multer.diskStorage({
