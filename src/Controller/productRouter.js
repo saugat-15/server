@@ -42,10 +42,10 @@ router.post("/", upload.single("image"), async (req, res) => {
     console.log(req.body);
     const product = await Products.create(req.body);
     if (product) {
-      debugger;
-      const file = req.file;
-      const result = await uploadFile(file);
-       console.log(result);
+      // debugger;
+      // const file = req.file;
+      // const result = await uploadFile(file);
+      //  console.log(result);
       res.json({
         message: "product added successfully",
         productDetail: product,
