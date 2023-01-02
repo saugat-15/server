@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
     if (findProducts) {
       console.log(findProducts)
       res.send({
-        message: "products fetchedsss",
+        message: "products fetched",
         productsList: findProducts,
       });
     }
@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
 });
 // debugger;
 router.post("/", upload.single("image"), async (req, res) => {
-  console.log('aassshit')
+  // console.log('aassshit')
  req.body.productImage = req.file.filename;
  console.log(req.file);
   try {
