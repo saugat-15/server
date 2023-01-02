@@ -2,12 +2,14 @@ const express = require("express");
 const Products = require("../Model/productsSchema");
 const router = express.Router();
 const multer = require("multer");
+
+const {uploadFile} = require('../../s3')
 // const upload = multer()
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     console.log(file);
-    cb(null, "../client/uploads");
+    cb(null, "../client/src/uploads");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -31,21 +33,26 @@ router.get("/", async (req, res) => {
     console.log(error);
   }
 });
-
-router.post("/", upload.single("file"), async (req, res) => {
- // req.body.productImage = req.file.filename;
- // console.log(req.file);
+// debugger;
+router.post("/", upload.single("image"), async (req, res) => {
+  console.log('aassshit')
+ req.body.productImage = req.file.filename;
+ console.log(req.file);
   try {
     console.log(req.body);
     const product = await Products.create(req.body);
     if (product) {
+      debugger;
+      const file = req.file;
+      const result = await uploadFile(file);
+       console.log(result);
       res.json({
         message: "product added successfully",
         productDetail: product,
       });
     }
   } catch (error) {
-    res.send({
+    res.json({
       message: "something went wrong",
       error: error,
     });

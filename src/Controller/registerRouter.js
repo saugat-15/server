@@ -9,6 +9,7 @@ router.post('/', (req, res) => {
     try{
         bcrypt.hash(req.body.password, saltRounds).then(function(hash) {
             // Store hash in your password DB.
+            console.log(req.body);
             req.body.password = hash;
             const user = User.create(req.body);
             if(user){
