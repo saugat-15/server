@@ -2,9 +2,12 @@ const express = require("express");
 const Products = require("../Model/productsSchema");
 const router = express.Router();
 const multer = require("multer");
+const cloudinary = require('cloudinary').v2;
+const path = require('path');
+
 
 // const {uploadFile} = require('../../s3')
-// const upload = multer()
+// const upload = multer()8g
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -15,6 +18,24 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
+
+
+
+cloudinary.config({
+  cloud_name: 'dbqifkohb',
+  api_key: '433712114898133',
+  api_secret: '-XwwRKWUOnn7zrKc-hiSExmCZOk'
+});
+
+
+
+// cloudinary.uploader.upload(filePath,  { resource_type: 'auto' }, function(error, result) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log(result);
+//   }
+// });
 
 const upload = multer({ storage: storage });
 
@@ -35,17 +56,18 @@ router.get("/", async (req, res) => {
 });
 // debugger;
 router.post("/", upload.single("image"), async (req, res) => {
+  const file = req.file;
   // console.log('aassshit')
  req.body.productImage = req.file.filename;
  console.log(req.file);
   try {
     console.log(req.body);
+    cloudinary.uploader.upload(file.path, { resource_type: "auto" }, (error, result) => {
+      // if(error) return next(error);
+      return res.send(result);
+  });
     const product = await Products.create(req.body);
     if (product) {
-      // debugger;
-      // const file = req.file;
-      // const result = await uploadFile(file);
-      //  console.log(result);
       res.json({
         message: "product added successfully",
         productDetail: product,
@@ -59,13 +81,23 @@ router.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
-//   console.log(req.file);
+router.put("/", upload.single("image"), async (req, res) => {
+  console.log(req.file);
+  
   try {
-    // req.body.productImage = req.file.filename;
+    req.body.productImage = req.file.filename;
     console.log(req.body);
-    const id = req.body._id;
-    const product = await Products.findByIdAndUpdate(id, req.body);
+    console.log(req.file.filename);
+    const id = req.body.id;
+    const product = await Products.findByIdAndUpdate(
+      id,
+      req.body
+      // { new: true }
+    );
+
+    console.log(product);
+
+    await product.save();
 
     if (product) {
       res.json({

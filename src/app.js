@@ -16,12 +16,14 @@ app.use(express.urlencoded({extended:true}))
 const productsRouter = require('./Controller/productRouter');
 const registerRouter = require('./Controller/registerRouter');
 const loginRouter = require('./Controller/loginRouter');
+// const channelRouter = require('./Controller/channelRouter');
 // const imageRouter = require('./Controller/imageRouter');
 // const { connect } = require('mongoose');
 
 app.use('/products', productsRouter)
 app.use('/login', loginRouter)
 app.use('/register', registerRouter)
+// app.use('/channels', channelRouter)
 // app.use('/image', imageRouter)
 
 app.listen(process.env.PORT, () => {
