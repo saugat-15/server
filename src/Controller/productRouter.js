@@ -18,21 +18,21 @@ const storage = multer.diskStorage({
 
 const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({
-  cloud_name: 'YOUR_CLOUD_NAME',
-  api_key: 'YOUR_API_KEY',
-  api_secret: 'YOUR_API_SECRET'
-});
+// cloudinary.config({
+//   cloud_name: 'YOUR_CLOUD_NAME',
+//   api_key: 'YOUR_API_KEY',
+//   api_secret: 'YOUR_API_SECRET'
+// });
 
-const filePath = 'path/to/image.jpg';
+// const filePath = 'path/to/image.jpg';
 
-cloudinary.uploader.upload(filePath, { resource_type: 'auto' }, function(error, result) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log(result);
-  }
-});
+// cloudinary.uploader.upload(filePath, { resource_type: 'auto' }, function(error, result) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log(result);
+//   }
+// });
 
 const upload = multer({ storage: storage });
 
