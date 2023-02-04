@@ -2,19 +2,23 @@ const express = require("express");
 const Products = require("../Model/productsSchema");
 const router = express.Router();
 const multer = require("multer");
+const path = require('path');
+const cloudinary = require('./cloudinary');
 
 // const {uploadFile} = require('../../s3')
 // const upload = multer()
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log(file);
-    cb(null, "../client/src/uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
+
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     console.log(file);
+//     cb(null, "../client/src/uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
 
 // const cloudinary = require('cloudinary').v2;
 
@@ -34,7 +38,17 @@ const storage = multer.diskStorage({
 //   }
 // });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage:  multer.diskStorage({}),
+  fileFilter: (req, file, cb) => {
+    let ext = path.extname(file.originalname);
+    if(ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" ){
+      cd(new Error('File type is not supported'), false);
+      return;
+    }
+    cb(null, true);
+  }
+})
 
 router.get("/", async (req, res) => {
   // console.log(req.body);
@@ -54,8 +68,11 @@ router.get("/", async (req, res) => {
 // debugger;
 router.post("/", upload.single("image"), async (req, res) => {
   // console.log('aassshit')
- req.body.productImage = req.file.filename;
- console.log(req.file);
+//  console.log(req.file);
+const result = await cloudinary.uploader.upload(req.file.path);
+    console.log(result);
+    res.json(result);
+    req.body.productImage = result.secure_url;
   try {
     console.log(req.body);
     const product = await Products.create(req.body);
@@ -79,8 +96,11 @@ router.post("/", upload.single("image"), async (req, res) => {
 
 router.put("/", upload.single("image"), async (req, res) => {
   console.log(req.file);
+  const result = await cloudinary.uploader.upload(req.file.path);
+    console.log(result);
+    res.json(result);
+    req.body.productImage = result.secure_url;
   try {
-    req.body.productImage = req.file.filename;
     console.log(req.body);
     console.log(req.file.filename);
     const id = req.body.id;
