@@ -7,6 +7,7 @@ const productsSchema = new mongoose.Schema(
     price: { type: Number, },
     productImage: { type: String,},
     description: { type: String,},
+    cloudinary_id: {type:String},
   },
   {
     collection: "products",

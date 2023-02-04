@@ -5,39 +5,6 @@ const multer = require("multer");
 const path = require('path');
 const cloudinary = require('./cloudinary');
 
-// const {uploadFile} = require('../../s3')
-// const upload = multer()
-
-
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     console.log(file);
-//     cb(null, "../client/src/uploads");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
-
-// const cloudinary = require('cloudinary').v2;
-
-// cloudinary.config({
-//   cloud_name: 'YOUR_CLOUD_NAME',
-//   api_key: 'YOUR_API_KEY',
-//   api_secret: 'YOUR_API_SECRET'
-// });
-
-// const filePath = 'path/to/image.jpg';
-
-// cloudinary.uploader.upload(filePath, { resource_type: 'auto' }, function(error, result) {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log(result);
-//   }
-// });
-
 const upload = multer({
   storage:  multer.diskStorage({}),
   fileFilter: (req, file, cb) => {
@@ -71,8 +38,8 @@ router.post("/", upload.single("image"), async (req, res) => {
 //  console.log(req.file);
 const result = await cloudinary.uploader.upload(req.file.path);
     console.log(result);
-    res.json(result);
     req.body.productImage = result.secure_url;
+    req.body.cloudinary_id = result.public_id;
   try {
     console.log(req.body);
     const product = await Products.create(req.body);
@@ -84,6 +51,7 @@ const result = await cloudinary.uploader.upload(req.file.path);
       res.json({
         message: "product added successfully",
         productDetail: product,
+        result,
       });
     }
   } catch (error) {
